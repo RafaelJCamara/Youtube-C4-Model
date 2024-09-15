@@ -1,0 +1,31 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+AddRelTag("async", $lineStyle = DashedLine())
+
+title My E-Commerce
+
+Person(person, "Client", "E-Commerce user")
+
+System_Ext(payment_gateway, "Payment GW")
+
+System_Boundary(ecommerce, "Ecommerce"){
+    Container(spa, "SPA React", "React")
+    Container(catalog_service, "Catalog Microservice", ".NET")
+    Container(order_service, "Order Microservice", ".NET")
+    Container(payment_service, "Payment Service", ".NET")
+
+    ContainerDb(catalog_db, "Catalog DB", "MySQL")
+    ContainerDb(order_db, "Order DB", "MySQL")
+    ContainerDb(payment_db, "Payment DB", "MongoDB")
+
+    Rel(person, spa, "Uses", "HTTPS")
+    Rel(catalog_service, catalog_db, "Uses", "EF Core")
+    Rel(order_service, order_db, "Uses", "EF Core")
+    Rel(payment_service, payment_db, "Uses", "Mongo package")
+    Rel(payment_service, payment_gateway, "Uses", "HTTPS")
+    Rel(spa, catalog_service, "Uses", "HTTPS")
+    Rel(catalog_service, order_service, "Uses", "Queue", $tags = "async")
+    Rel(order_service, payment_service, "Uses", "Queue", $tags = "async")
+}
+
+@enduml

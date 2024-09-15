@@ -1,0 +1,17 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title My E-Commerce
+
+Person(person, "Client", "E-Commerce user")
+
+System(ecommerce_system, "E-Commerce System")
+
+System_Ext(observability, "Observability platform")
+System_Ext(payment_gateway, "Payment GW")
+
+Rel(person, ecommerce_system, "Uses", "HTTPS")
+Rel(ecommerce_system, observability, "Uses", "HTTPS")
+Rel(ecommerce_system, payment_gateway, "Uses", "HTTPS")
+
+@enduml

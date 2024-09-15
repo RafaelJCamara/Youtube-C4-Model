@@ -1,0 +1,20 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title My E-Commerce
+
+Container(spa, "SPA React", "React")
+
+ContainerDb(catalog_db, "Catalog DB", "MySQL")
+
+Container_Boundary(catalog_api, "Catalog Microservice Container") {
+    Component(catalog_controller, "Catalog Controller", "MVC Controller", "Interactions with the catalog")
+    Component(favorites_controller, "Favorites Controller", "Minimal API", "Make items in the catalog belong closer to your heart.")
+
+    Rel(catalog_controller, catalog_db, "Writes & Reads from", "EF Core")
+    Rel(favorites_controller, catalog_db, "Writes & Reads from", "EF Core")
+}
+
+Rel(spa, catalog_controller, "Uses", "HTTPS")
+Rel(spa, favorites_controller, "Uses", "HTTPS")
+@enduml
